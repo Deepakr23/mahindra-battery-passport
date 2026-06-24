@@ -32,15 +32,15 @@ sudo usermod -aG docker $USER
 
 echo "=== 3. Building Mahindra Battery Passport Docker Image ==="
 # Stops previous instances if they exist
-docker stop battery-passport || true
-docker rm battery-passport || true
+sudo docker stop battery-passport || true
+sudo docker rm battery-passport || true
 
 # Build docker container
-docker build -t mahindra-battery-passport .
+sudo docker build -t mahindra-battery-passport .
 
 echo "=== 4. Starting Container Service on Port 80 ==="
 # Runs the container, maps it to host port 80, and restarts automatically on reboot
-docker run -d \
+sudo docker run -d \
   --name battery-passport \
   -p 80:80 \
   --restart always \
