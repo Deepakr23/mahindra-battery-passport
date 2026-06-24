@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahindra Electric - Battery Passport & PyBaMM Simulator</title>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- SIDEBAR: Digital Battery Passport Registry -->
+        <aside class="sidebar-passport">
+            <div class="brand-header">
+                <i class="fa-solid fa-bolt brand-icon"></i>
+                <div class="brand-text">
+                    <span class="brand-name">mahindra</span>
+                    <span class="brand-sub">battery passport</span>
+                </div>
+            </div>
+            
+            <div class="passport-id-card">
+                <div class="passport-id-badge">REGISTRY ACTIVE</div>
+                <h2 id="meta-passport-id">M-BATT-LFP-982361A</h2>
+                <div class="qr-container">
+                    <!-- Simple CSS/SVG QR Code Mock -->
+                    <svg class="qr-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,5 h30 v30 h-30 z M15,15 h10 v10 h-10 z M65,5 h30 v30 h-30 z M75,15 h10 v10 h-10 z M5,65 h30 v30 h-30 z M15,75 h10 v10 h-10 z M45,45 h10 v10 h-10 z M55,55 h10 v10 h-10 z M45,15 h10 v10 h-10 z M45,75 h10 v10 h-10 z M75,45 h10 v10 h-10 z" fill="#e31837"/>
+                        <path d="M35,45 h10 v10 h-10 z M65,65 h15 v15 h-15 z M80,80 h15 v15 h-15 z M50,60 h10 v10 h-10 z M60,80 h10 v10 h-10 z" fill="#ffffff"/>
+                    </svg>
+                    <span class="qr-label">Scan Passport Record</span>
+                </div>
+            </div>
+
+            <div class="passport-details">
+                <h3><i class="fa-solid fa-circle-info"></i> General Registry</h3>
+                <div class="detail-row">
+                    <span class="label">Manufacturer:</span>
+                    <span class="val" id="meta-manufacturer">Mahindra & Mahindra</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Manufactured:</span>
+                    <span class="val" id="meta-date">2023-11-15</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Battery Model:</span>
+                    <span class="val" id="meta-model">M-XEV LFP 60</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Cell Chemistry:</span>
+                    <span class="val" id="meta-chemistry">LFP (Lithium Iron Phosphate)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Nominal Specs:</span>
+                    <span class="val" id="meta-specs">320V / 180Ah (57.6 kWh)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Assembly Plant:</span>
+                    <span class="val" id="meta-plant">Pune, MH, India</span>
+                </div>
+            </div>
+
+            <div class="passport-sustainability">
+                <h3><i class="fa-solid fa-leaf"></i> Sustainability & ESG</h3>
+                <div class="detail-row">
+                    <span class="label">CO2 Footprint:</span>
+                    <span class="val"><strong id="meta-co2">2840</strong> kg CO2eq</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Recyclability:</span>
+                    <span class="val highlighted-green"><strong id="meta-recyclability">94.2</strong>% Recyclable</span>
+                </div>
+                
+                <div class="materials-breakdown">
+                    <span class="label">Recycled Content:</span>
+                    <div class="material-bar-list">
+                        <div class="material-bar-item">
+                            <span class="mat-name">Lithium</span>
+                            <div class="progress-track"><div class="progress-fill" style="width: 6.8%"></div></div>
+                            <span class="mat-pct">6.8%</span>
+                        </div>
+                        <div class="material-bar-item">
+                            <span class="mat-name">Graphite</span>
+                            <div class="progress-track"><div class="progress-fill" style="width: 12.5%"></div></div>
+                            <span class="mat-pct">12.5%</span>
+                        </div>
+                        <div class="material-bar-item">
+                            <span class="mat-name">Copper</span>
+                            <div class="progress-track"><div class="progress-fill" style="width: 18.2%"></div></div>
+                            <span class="mat-pct">18.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disassembly-instructions">
+                <h3><i class="fa-solid fa-screwdriver-wrench"></i> Disassembly Manual</h3>
+                <ol id="meta-disassembly-list">
+                    <!-- Loaded dynamically from API -->
+                </ol>
+            </div>
+        </aside>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="dashboard-main">
+            
+            <!-- HEADER: System status & Connectivity -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1>MAHINDRA BATTERY DIAGNOSTICS</h1>
+                    <p class="subtitle">E-Transport Division &bull; Cloud Telemetry Services</p>
+                </div>
+                
+                <div class="wifi-status-card" id="connection-status-container">
+                    <div class="wifi-pulse" id="wifi-indicator"></div>
+                    <div class="wifi-info">
+                        <div class="wifi-header">
+                            <span class="status-lbl">Wi-Fi Telemetry:</span>
+                            <span class="status-val connected" id="connection-status">Connected</span>
+                        </div>
+                        <p class="wifi-latency" id="connection-latency">Signal: -68dBm &bull; Ping 12ms</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SECTION 1: Hardware Wi-Fi Telemetry (Live Gauges) -->
+            <section class="dashboard-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-satellite-dish"></i> Live IoT Hardware Telemetry</h2>
+                    <span class="live-indicator"><span class="red-dot"></span> LIVE WI-FI STREAM</span>
+                </div>
+                
+                <div class="telemetry-grid">
+                    <!-- Gauge 1: Voltage -->
+                    <div class="telemetry-card">
+                        <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div class="telemetry-data">
+                            <span class="telemetry-label">Pack Voltage</span>
+                            <div class="telemetry-value"><span id="tel-voltage">322.5</span> <span class="unit">V</span></div>
+                            <span class="telemetry-sub">Nominal: 320.0 V</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Gauge 2: Current -->
+                    <div class="telemetry-card">
+                        <div class="card-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                        <div class="telemetry-data">
+                            <span class="telemetry-label">Pack Current</span>
+                            <div class="telemetry-value"><span id="tel-current">-12.4</span> <span class="unit">A</span></div>
+                            <span class="telemetry-sub" id="tel-current-status">Discharging</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Gauge 3: Temperature -->
+                    <div class="telemetry-card">
+                        <div class="card-icon"><i class="fa-solid fa-temperature-half"></i></div>
+                        <div class="telemetry-data">
+                            <span class="telemetry-label">Pack Temperature</span>
+                            <div class="telemetry-value"><span id="tel-temperature">28.5</span> <span class="unit">°C</span></div>
+                            <span class="telemetry-sub">Thermal Limit: 55 °C</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Gauge 4: State of Charge (SoC) -->
+                    <div class="telemetry-card radial-soc-card">
+                        <div class="telemetry-data">
+                            <span class="telemetry-label">State of Charge</span>
+                            <div class="radial-progress">
+                                <svg class="progress-circle" viewBox="0 0 100 100">
+                                    <circle class="bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="fg" id="soc-radial-ring" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div class="soc-text"><span id="tel-soc">85</span><span class="pct">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="telemetry-sub-grid">
+                    <!-- Gauge 5: State of Health (SoH) -->
+                    <div class="telemetry-card-sm">
+                        <span class="label">State of Health (SoH)</span>
+                        <div class="value-row">
+                            <span class="value" id="tel-soh">78.2%</span>
+                            <span class="status-badge warning" id="soh-badge">Second-Life Repurposed</span>
+                        </div>
+                        <div class="bar-container"><div class="bar-fill warning" id="soh-bar" style="width: 78.2%"></div></div>
+                    </div>
+
+                    <!-- Gauge 6: Cycles & Internal Resistance -->
+                    <div class="telemetry-card-sm">
+                        <span class="label">Battery Aging Diagnostics</span>
+                        <div class="diagnostics-row">
+                            <div class="diag-item">
+                                <span class="diag-label">Completed Cycles</span>
+                                <span class="diag-val" id="tel-cycles">920</span>
+                            </div>
+                            <div class="diag-item">
+                                <span class="diag-label">Internal Resistance</span>
+                                <span class="diag-val" id="tel-ir">1.45 mΩ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: PyBaMM Simulations Workspace -->
+            <section class="dashboard-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-calculator"></i> PyBaMM Electrochemical Simulation Workspace</h2>
+                    <span class="solver-source-badge" id="solver-badge">Loading Solver...</span>
+                </div>
+                
+                <div class="simulation-workspace">
+                    <!-- Controller Pane -->
+                    <div class="simulation-controls">
+                        <h3>Simulation Configuration</h3>
+                        
+                        <div class="control-group">
+                            <label for="sim-chemistry">Cell Chemistry Model</label>
+                            <select id="sim-chemistry" class="styled-select">
+                                <option value="LFP" selected>LFP (Mahindra M-XEV Model)</option>
+                                <option value="NMC">NMC (High Power Density Model)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <div class="slider-header">
+                                <label for="sim-crate">Discharge Rate (C-rate)</label>
+                                <span class="slider-val" id="sim-crate-val">1.0 C</span>
+                            </div>
+                            <input type="range" id="sim-crate" min="0.2" max="3.0" step="0.1" value="1.0" class="styled-slider">
+                            <span class="slider-desc">Higher C-rates accelerate voltage collapse & heat generation.</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <div class="slider-header">
+                                <label for="sim-temp">Ambient Temperature</label>
+                                <span class="slider-val" id="sim-temp-val">25 °C</span>
+                            </div>
+                            <input type="range" id="sim-temp" min="0" max="50" step="5" value="25" class="styled-slider">
+                            <span class="slider-desc">Low temps limit capacity; high temps accelerate degradation.</span>
+                        </div>
+                        
+                        <button id="run-simulation-btn" class="primary-btn">
+                            <i class="fa-solid fa-play"></i> Run PyBaMM Simulation
+                        </button>
+                    </div>
+
+                    <!-- Visualization Pane -->
+                    <div class="simulation-charts-container">
+                        <div class="chart-header">
+                            <span class="chart-tab active" data-chart="voltage">Discharge Profile</span>
+                            <span class="chart-tab" data-chart="thermal">Thermal Rise</span>
+                            <span class="chart-tab" data-chart="degradation">SEI Growth</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="simulationChart"></canvas>
+                        </div>
+                        <div class="chart-legend" id="chart-metrics-summary">
+                            <!-- Populated on simulation run -->
+                            Simulating electrochemical properties of the cell chemistry...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Decision Engine - Recycle vs Reuse (Second Life) -->
+            <section class="dashboard-section decision-engine-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-brain"></i> Passport Decision Engine (End-of-Life Evaluator)</h2>
+                    <span class="engine-badge"><i class="fa-solid fa-shield-halved"></i> SAFETY STANDARDS IEC 62619</span>
+                </div>
+                
+                <div class="decision-container" id="decision-panel">
+                    <!-- Main Recommendation Pane -->
+                    <div class="decision-output-card" id="decision-outcome-card">
+                        <span class="evaluation-label">METADATA DECISION RECOMMENDATION</span>
+                        <h1 class="decision-title" id="decision-text">EVALUATING SYSTEM...</h1>
+                        <div class="decision-pill" id="decision-status-pill">Calculating...</div>
+                        
+                        <div class="decision-reasons">
+                            <h4>ENGINEERING LOGS & HEALTH CRITERIA:</h4>
+                            <ul id="decision-reasons-list">
+                                <!-- Loaded dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Suitability Matrix -->
+                    <div class="decision-suitability-matrix">
+                        <h3>Second-Life Application Feasibility Matrix</h3>
+                        
+                        <div class="suitability-row">
+                            <div class="suit-app">
+                                <i class="fa-solid fa-car"></i>
+                                <span>Primary EV Automotive Use</span>
+                            </div>
+                            <span class="suit-status" id="suit-ev">Pending</span>
+                        </div>
+                        
+                        <div class="suitability-row">
+                            <div class="suit-app">
+                                <i class="fa-solid fa-network-wired"></i>
+                                <span>Telecom Tower Backup Power</span>
+                            </div>
+                            <span class="suit-status" id="suit-telecom">Pending</span>
+                        </div>
+                        
+                        <div class="suitability-row">
+                            <div class="suit-app">
+                                <i class="fa-solid fa-building-shield"></i>
+                                <span>BESS (Battery Energy Storage Systems)</span>
+                            </div>
+                            <span class="suit-status" id="suit-bess">Pending</span>
+                        </div>
+                        
+                        <div class="suitability-row">
+                            <div class="suit-app">
+                                <i class="fa-solid fa-recycle"></i>
+                                <span>Materials Recovery & Recycling</span>
+                            </div>
+                            <span class="suit-status" id="suit-materials">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Local JS -->
+    <script src="app.js"></script>
+</body>
+</html>

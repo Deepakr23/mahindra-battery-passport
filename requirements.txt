@@ -1,0 +1,8 @@
+# Core dependencies for High-Fidelity Simulator
+numpy>=1.21.0
+
+# Optional: Physical PyBaMM solver.
+# Uncomment the line below to install the real PyBaMM solver.
+# NOTE: PyBaMM requires C compilers (build-essential, gfortran) and takes ~10 minutes to compile.
+# It is recommended to use at least a t3.medium instance (4GB RAM) if installing PyBaMM.
+# pybamm>=23.5
